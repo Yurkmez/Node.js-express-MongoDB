@@ -19,10 +19,22 @@ app.set('views', 'views'); // и директория, в которй буду�
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.render('index'); // Здесь мы просто указываем название файла, т.к. выше мы указали директорию views в параметрах по умолчанию
+    res.render('index', {
+        title: 'Home',
+        isHome: true,
+    }); // Здесь мы просто указываем название файла, т.к. выше мы указали директорию views в параметрах по умолчанию
 });
-app.get('/about', (req, res) => {
-    res.render('about'); // - " -
+app.get('/courses', (req, res) => {
+    res.render('courses', {
+        title: 'Courses',
+        isCourses: true,
+    }); // - " -
+});
+app.get('/add', (req, res) => {
+    res.render('addCourse', {
+        title: 'Add course',
+        isAddCourse: true,
+    }); // - " -
 });
 
 const PORT = process.env.PORT || 5000;
