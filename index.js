@@ -1,8 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const homeRouter = require('./routes/homeRout');
-const coursesRouter = require('./routes/coursesRout');
-const addCourseRouter = require('./routes/addCourse');
+const homeRouter = require('./routes/homeRoutes');
+const coursesRouter = require('./routes/coursesRoutes');
+const addCourseRouter = require('./routes/addCourseRoutes');
 
 const app = express();
 
@@ -20,6 +20,8 @@ app.set('views', 'views'); // и директория, в которй буду�
 
 // Папка "static" определяется как общая для доступа с файлов приложения, в частности, обеспечивает доступ к index.css
 app.use(express.static('public'));
+// Middleware
+app.use(express.urlencoded({ extended: true }));
 // Подключение роутов, вынесенных в отдельные модули
 app.use('/', homeRouter);
 app.use('/courses', coursesRouter);
