@@ -44,7 +44,7 @@ class Course {
             );
         });
     }
-    // Статический метод для получения данных из файла (fs, path)
+    // Статический метод для получения всех курсов из файла (fs, path)
     static getAll() {
         return new Promise((resolve, reject) => {
             fs.readFile(
@@ -59,6 +59,15 @@ class Course {
                 }
             );
         });
+    }
+
+    static async getById(id) {
+        console.log(id);
+        console.log('____________');
+        const courses = await Course.getAll();
+        const aaa = courses.find((item) => item.id === id);
+        console.log(aaa);
+        return courses.find((item) => item.id === id);
     }
 }
 
