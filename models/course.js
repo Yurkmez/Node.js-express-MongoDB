@@ -44,6 +44,7 @@ class Course {
             );
         });
     }
+
     // Статический метод для получения всех курсов из файла (fs, path)
     static getAll() {
         return new Promise((resolve, reject) => {
@@ -65,10 +66,29 @@ class Course {
         console.log(id);
         console.log('____________');
         const courses = await Course.getAll();
-        const aaa = courses.find((item) => item.id === id);
-        console.log(aaa);
+        // const aaa = courses.find((item) => item.id === id);
+        // console.log(aaa);
         return courses.find((item) => item.id === id);
     }
-}
 
+    static async update(course) {
+        const courses = await Course.getAll();
+        const idx = courses.findIndex((item) => item.id === course.id);
+        courses[idx] = course;
+        return new Promise((resolve, reject) => {
+            // console.log(courses);
+            fs.writeFile(
+                path.join(__dirname, '..', 'data', 'data.json'),
+                JSON.stringify(courses),
+                (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                }
+            );
+        });
+    }
+}
 module.exports = Course;
