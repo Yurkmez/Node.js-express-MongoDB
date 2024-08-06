@@ -47,6 +47,40 @@ class Card {
             );
         });
     }
+
+    static async remove(id) {
+        // Получаем все карточки обращаясь к "static async fetch"
+        const cards = await Card.fetch();
+        // ищем индекс карточки по переданному индексу
+        const idx = cards.courses.findIndex((item) => item.id === id);
+        // определяем course = найденной карточке
+        const course = cards.courses[idx];
+        // если она одна
+        if (course.count === 1) {
+            // удаляем ее с помощью метода filter
+            // и в cards.courses - оставшиеся курсы
+            cards.courses = cards.courses.filter((item) => item.id !== id);
+            // если их несколько - уменьшаем к-во у найденной картоки
+        } else {
+            cards.courses[idx].count--;
+        }
+        // корректируем общую стоимость курсов
+        cards.price -= course.price;
+        // наконец, записываем оставшиеся в корзине карточки в файл
+        return new Promise((resolve, reject) => {
+            fs.writeFile(
+                path.join(__dirname, '..', 'data', 'card.json'),
+                JSON.stringify(cards),
+                (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(cards);
+                    }
+                }
+            );
+        });
+    }
 }
 
 module.exports = Card;
