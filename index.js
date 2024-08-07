@@ -3,6 +3,13 @@ const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 
+// Solve the problem with the error "Handlebars: Access has been denied to resolve the property ..."
+// See "https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access"
+const Handlebars = require('handlebars');
+const {
+    allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
+// _________________________________________________________________________________
 const homeRouter = require('./routes/homeRoutes');
 const coursesRouter = require('./routes/coursesRoutes');
 const addCourseRouter = require('./routes/addCourseRoutes');
@@ -16,6 +23,8 @@ const app = express();
 const hbs = exphbs.create({
     defaultLayout: 'main',
     extname: 'hbs',
+    // Solve the problem with the error "Handlebars: Access has been denied to resolve the property ..."
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 app.engine('hbs', hbs.engine); // Регистрируем hbs в качестве движка для рендеринга HTML страниц
 app.set('view engine', 'hbs'); // Установки по умолчанию: название движка

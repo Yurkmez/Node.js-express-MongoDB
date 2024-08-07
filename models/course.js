@@ -14,6 +14,5 @@ const course = new Schema({
     // поле id мы не указываем,
     // оно будет создаваться mongoose автоматически
 });
-// Экспортируе название модели - 'Course'
-// и схему - course
+// Экспортируе название модели - 'Course' и схему - course
 module.exports = model('Course', course);

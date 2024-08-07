@@ -6,7 +6,9 @@
             id='title'
             type='text'
             name='title'
-            value={{course.title}}
+            {{! Интересно, что если не поставить кавычки то 
+            название с пробелом в value не показывается полностью }}
+            value='{{course.title}}'
             class='validate'
             required
         />
