@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
+const mongoose = require('mongoose');
+
 const homeRouter = require('./routes/homeRoutes');
 const coursesRouter = require('./routes/coursesRoutes');
 const addCourseRouter = require('./routes/addCourseRoutes');
@@ -46,6 +48,18 @@ app.use('/', homeRouter);
 app.use('/courses', coursesRouter);
 app.use('/add', addCourseRouter);
 app.use('/card', cardRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+const url =
+    'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';
+// Start MongoDB
+async function start() {
+    try {
+        await mongoose.connect(url);
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () =>
+            console.log(`Server is running on port ${PORT}`)
+        );
+    } catch (error) {
+        console.log(error);
+    }
+}
+start();

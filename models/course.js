@@ -1,94 +1,19 @@
-const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
-const path = require('path');
-const { rejects } = require('assert');
+const { Schema, model } = require('mongoose');
 
-class Course {
-    constructor(title, price, img) {
-        (this.title = title), (this.price = price), (this.img = img);
-        this.id = uuidv4();
-    }
-
-    toJSON() {
-        return {
-            title: this.title,
-            price: this.price,
-            img: this.img,
-            id: this.id,
-        };
-    }
-    //
-    async save() {
-        // Получаем данные из файла (вызов метода getAll)
-        const courses = await Course.getAll();
-        // Добавляем к ним новый курс (+ вызов метода toJSON)
-        // не очень понятна его роль...
-        // вероятно "this" - это данные, поступающие от
-        //  addCourseRoutes - (const course = new Course(req.body.title, req.body.price, req.body.img);)
-        // (course.save();)
-        // a toJSON() - структурирует данные?
-        courses.push(this.toJSON());
-
-        return new Promise((resolve, reject) => {
-            // console.log(courses);
-            fs.writeFile(
-                path.join(__dirname, '..', 'data', 'data.json'),
-                JSON.stringify(courses),
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }
-            );
-        });
-    }
-
-    // Статический метод для получения всех курсов из файла (fs, path)
-    static getAll() {
-        return new Promise((resolve, reject) => {
-            fs.readFile(
-                path.join(__dirname, '..', 'data', 'data.json'),
-                'utf-8',
-                (err, content) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(JSON.parse(content));
-                    }
-                }
-            );
-        });
-    }
-
-    static async getById(id) {
-        console.log(id);
-        console.log('____________');
-        const courses = await Course.getAll();
-        // const aaa = courses.find((item) => item.id === id);
-        // console.log(aaa);
-        return courses.find((item) => item.id === id);
-    }
-
-    static async update(course) {
-        const courses = await Course.getAll();
-        const idx = courses.findIndex((item) => item.id === course.id);
-        courses[idx] = course;
-        return new Promise((resolve, reject) => {
-            // console.log(courses);
-            fs.writeFile(
-                path.join(__dirname, '..', 'data', 'data.json'),
-                JSON.stringify(courses),
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }
-            );
-        });
-    }
-}
-module.exports = Course;
+const course = new Schema({
+    title: {
+        type: String,
+        // ниже требование обязательности данного поля
+        required: true,
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
+    img: String,
+    // поле id мы не указываем,
+    // оно будет создаваться mongoose автоматически
+});
+// Экспортируе название модели - 'Course'
+// и схему - course
+module.exports = model('Course', course);
