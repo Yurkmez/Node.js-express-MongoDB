@@ -16,6 +16,8 @@ router.post('/', async (req, res) => {
         title: req.body.title,
         price: req.body.price,
         img: req.body.img,
+        // В index.js есть мидлваре, где "req.user = user"
+        userId: req.user,
     });
     try {
         await course.save();

@@ -11,6 +11,10 @@ const course = new Schema({
         required: true,
     },
     img: String,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    },
     // поле id мы не указываем,
     // оно будет создаваться mongoose автоматически
 });

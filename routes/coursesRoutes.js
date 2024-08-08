@@ -6,7 +6,14 @@ const router = Router();
 // Роут получения всех курсов
 router.get('/', async (req, res) => {
     // используем встроенный метод find (если в скобках пусто - забираем все курсы)
-    const courses = await Course.find();
+    // const courses = await Course.find();
+    // ______ опции (select) ограничить вывод данных в браузере
+    // const courses = await Course.find().select('title img');
+    // добраться до данных юзера через populate
+    // где вторым параметром мы ограничиваем данные
+    const courses = await Course.find().populate('userId', 'email');
+    console.log(courses[2].userId);
+
     res.render('courses', {
         title: 'Courses',
         isCourses: true,
