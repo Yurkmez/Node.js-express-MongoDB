@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const Course = require('../models/course');
+const { log } = require('handlebars');
 
 const router = Router();
 // Роут получения всех курсов
@@ -14,6 +15,7 @@ router.get('/', async (req, res) => {
 });
 // Роут получения одного курса по id
 router.get('/:id', async (req, res) => {
+    console.log('id:', req.params.id);
     const course = await Course.findById(req.params.id);
     res.render('singleCourse', {
         layout: 'empty',
@@ -43,6 +45,15 @@ router.post('/edit', async (req, res) => {
     //  далее записываем req.body уже без id, используя встроенный метод findByIdAndUpdate
     const aaa = await Course.findByIdAndUpdate(id, req.body);
     res.redirect('/courses');
+});
+
+router.post('/remove', async (req, res) => {
+    try {
+        await Course.deleteOne({ _id: req.body.id });
+        res.redirect('/courses');
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 module.exports = router;

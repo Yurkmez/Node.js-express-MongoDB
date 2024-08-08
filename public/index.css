@@ -5,12 +5,6 @@
     font-size: 2rem;
 }
 
-/* courses.hbs */
-
-/* .row {
-    width: 70%;
-} */
-
 /* course.hbs */
 .course {
     max-width: 300px;
@@ -40,4 +34,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+/* editCourse.nbs  */
+.form-margin {
+    margin-bottom: 2rem;
 }
