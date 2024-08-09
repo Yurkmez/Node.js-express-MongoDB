@@ -12,8 +12,6 @@ router.get('/', async (req, res) => {
     // добраться до данных юзера через populate
     // где вторым параметром мы ограничиваем данные
     const courses = await Course.find().populate('userId', 'email');
-    console.log(courses[2].userId);
-
     res.render('courses', {
         title: 'Courses',
         isCourses: true,

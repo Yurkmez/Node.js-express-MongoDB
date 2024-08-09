@@ -27,4 +27,39 @@ const userSchema = new Schema({
     },
 });
 
+// Создаем метод добавления курса
+// ! - обязательно через "function",
+// чтобы была возможность использования "this"
+userSchema.methods.addToCart = function (course) {
+    // создаем новый массив в виде копии массива курсов
+    //  у полученного курсаи, т.к.
+    // используем спреад оператор, то
+    // исходный массив мы не мутируем
+    const cloneItems = [...this.cart.items];
+    // console.log(cloneItems);
+    const idx = cloneItems.findIndex((aaa) => {
+        // т.к. courseId - объект, то ".toString()"
+        return aaa.courseId.toString() === course._id.toString();
+    });
+    // console.log(idx);
+    // Если такой курс есть "++", нет (idx = -1) - добавляем новый курс
+    // ! - idx это не индекс, который присваивается базой даннных, а
+    // а индекс элемента, т.е. 0, 1, 2, ...
+    if (idx >= 0) {
+        cloneItems[idx].count += 1;
+    } else {
+        cloneItems.push({
+            courseId: course._id,
+            count: 1,
+        });
+    }
+    const newCart = { items: cloneItems };
+    // В newCart полностью новый объект items: [...]
+    // console.log(newCart);
+    this.cart = newCart;
+    // _______ либо в одну строку
+    // this.cart = { items: newCart };
+    return this.save();
+};
+
 module.exports = model('User', userSchema);
