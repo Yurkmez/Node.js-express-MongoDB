@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const course = new Schema({
+const courseSchema = new Schema({
     title: {
         type: String,
         // ниже требование обязательности данного поля
@@ -19,5 +19,15 @@ const course = new Schema({
     // оно будет создаваться mongoose автоматически
 });
 
+// В приложении есть путаница _id и id,
+// данный метод это решает
+// и необходимы изменения в функции mapCartItems (cardByRuters.js)
+courseSchema.method('toClient', function () {
+    const course = this.toObject();
+    course.id = course._id;
+    delete course._id;
+    return course;
+});
+
 // Экспортируе название модели - 'Course' и схему - course
-module.exports = model('Course', course);
+module.exports = model('Course', courseSchema);
