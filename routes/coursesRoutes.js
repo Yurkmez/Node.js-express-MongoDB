@@ -1,3 +1,6 @@
+// res.redirect - instructs the client to redirect to another URL,
+// res.render  - generates HTML on the server and delivers it to the client.
+
 const { Router } = require('express');
 const Course = require('../models/course');
 const { log } = require('handlebars');

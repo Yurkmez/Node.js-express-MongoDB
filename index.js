@@ -14,6 +14,7 @@ const homeRouter = require('./routes/homeRoutes');
 const coursesRouter = require('./routes/coursesRoutes');
 const addCourseRouter = require('./routes/addCourseRoutes');
 const cardRoutes = require('./routes/cardBuyRoutes');
+const orderRouters = require('./routes/orderRoutes');
 // ___________________ models ______________________________
 const User = require('./models/user');
 // _________________________________________________________
@@ -66,6 +67,8 @@ app.use('/', homeRouter);
 app.use('/courses', coursesRouter);
 app.use('/add', addCourseRouter);
 app.use('/card', cardRoutes);
+app.use('/order', orderRouters);
+
 const url =
     'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';
 // Start MongoDB

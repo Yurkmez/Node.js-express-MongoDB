@@ -27,6 +27,9 @@
             </tbody>
         </table>
         <p><strong>Sum price: </strong><span class='price'>{{price}}</span></p>
+        <form action='./order' method='post'>
+            <button type='submit' class='btn'>Order</button>
+        </form>
     {{else}}
         <p>Basket is empty</p>
     {{/if}}
