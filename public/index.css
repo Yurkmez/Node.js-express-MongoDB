@@ -4,7 +4,10 @@
 .price {
     font-size: 2rem;
 }
-
+/* login.hbs */
+.auth {
+    padding-top: 1rem;
+}
 /* course.hbs */
 .course {
     max-width: 300px;

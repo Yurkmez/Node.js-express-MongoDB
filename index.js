@@ -10,11 +10,12 @@ const {
     allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access');
 // ____________________ Routers _____________________________________________________________
-const homeRouter = require('./routes/homeRoutes');
-const coursesRouter = require('./routes/coursesRoutes');
-const addCourseRouter = require('./routes/addCourseRoutes');
+const homeRoutes = require('./routes/homeRoutes');
+const coursesRoutes = require('./routes/coursesRoutes');
+const addCourseRoutes = require('./routes/addCourseRoutes');
 const cardRoutes = require('./routes/cardBuyRoutes');
-const orderRouters = require('./routes/orderRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const authRoutes = require('./routes/authRouters');
 // ___________________ models ______________________________
 const User = require('./models/user');
 // _________________________________________________________
@@ -63,11 +64,12 @@ app.use(async (req, res, next) => {
 // _________________ что реализуется в файле app.js (в папке public)
 // _________________ (в таком варианте мы прямо указываем метод запроса
 // _________________ fetch('/card/remove/' + id, {method: 'delete',})
-app.use('/', homeRouter);
-app.use('/courses', coursesRouter);
-app.use('/add', addCourseRouter);
+app.use('/', homeRoutes);
+app.use('/courses', coursesRoutes);
+app.use('/add', addCourseRoutes);
 app.use('/card', cardRoutes);
-app.use('/order', orderRouters);
+app.use('/order', orderRoutes);
+app.use('/auth', authRoutes);
 
 const url =
     'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';

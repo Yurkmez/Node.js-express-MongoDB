@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
             orders: orders.map((item) => {
                 return {
                     ...item._doc,
-                    ...item.courses.reduce((total, current) => {
+                    price: item.courses.reduce((total, current) => {
                         return (total += current.count * current.course.price);
                     }, 0),
                 };

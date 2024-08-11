@@ -1,0 +1,94 @@
+{{! В файле app.js папки public  мы должны инициализировать 
+эти tabs }}
+<div class='auth'>
+    <div class='row'>
+        <div class='col s12'>
+            <ul class='tabs'>
+                <li class='tab col s6'><a
+                        class='active'
+                        href='#login'
+                    >Login</a></li>
+                <li class='tab col s6'><a href='#register'>Register</a></li>
+            </ul>
+        </div>
+        <div id='login' class='col s6 offset-s3'>
+            <h5>Login to the app</h5>
+            <form action='/add' method='POST'>
+                <div class='input-field'>
+                    <input
+                        id='email'
+                        type='email'
+                        name='email'
+                        class='validate'
+                        required
+                    />
+                    <label for='email'>Email</label>
+                    <span class='helper-text' data-error='Enter email'></span>
+                </div>
+                <div class='input-field'>
+                    <input
+                        id='password'
+                        type='password'
+                        name='password'
+                        class='validate'
+                        required
+                    />
+                    <label for='password'>Password</label>
+                    <span
+                        class='helper-text'
+                        data-error='Enter password'
+                    ></span>
+                </div>
+
+                <button type='submit' class='btn btn-primary'>Login</button>
+            </form>
+
+        </div>
+        <div id='register' class='col s6 offset-s3'>
+            <h5>Register</h5>
+            <form action='/add' method='POST'>
+                <div class='input-field'>
+                    <input
+                        id='emailReg'
+                        type='email'
+                        name='email'
+                        class='validate'
+                        required
+                    />
+                    <label for='emailReg'>Email</label>
+                    <span class='helper-text' data-error='Enter email'></span>
+                </div>
+                <div class='input-field'>
+                    <input
+                        id='passwordReg'
+                        type='password'
+                        name='password'
+                        class='validate'
+                        required
+                    />
+                    <label for='passwordReg'>Password</label>
+                    <span
+                        class='helper-text'
+                        data-error='Enter password'
+                    ></span>
+                </div>
+                <div class='input-field'>
+                    <input
+                        id='confirm'
+                        type='password'
+                        name='confirm'
+                        class='validate'
+                        required
+                    />
+                    <label for='confirm'>Repead password</label>
+                    <span
+                        class='helper-text'
+                        data-error='Enter password'
+                    ></span>
+                </div>
+                <button type='submit' class='btn btn-primary'>Register</button>
+            </form>
+
+        </div>
+    </div>
+</div>
