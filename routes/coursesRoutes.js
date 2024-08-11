@@ -53,7 +53,7 @@ router.post('/edit', auth, async (req, res) => {
     // удаляем из body id,
     delete req.body.id;
     //  далее записываем req.body уже без id, используя встроенный метод findByIdAndUpdate
-    const aaa = await Course.findByIdAndUpdate(id, req.body);
+    await Course.findByIdAndUpdate(id, req.body);
     res.redirect('/courses');
 });
 

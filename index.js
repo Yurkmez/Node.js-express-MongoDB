@@ -24,7 +24,8 @@ const authRoutes = require('./routes/authRoutes');
 const User = require('./models/user');
 // ___________________ middleware ______________________________________
 const varMiddleware = require('./middleware/variablesMiddleware');
-
+const userMiddleware = require('./middleware/userMiddleware');
+// ________________________________________________________
 const app = express();
 const MONGODB_URL =
     'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';
@@ -59,8 +60,8 @@ app.use(
         store: store,
     })
 );
-// ___________________ ? _______________________
-
+// ___________________ user -> req.user _______________________
+app.use(userMiddleware);
 // то есть, если есть авторизация,
 //  а это в authRoutes, в POST запросе: req.session.isAuthenticated = true,
 // то в variableMiddleware(varMiddleware) мы имеем: res.locals.isAuth = req.session.isAuthenticated;

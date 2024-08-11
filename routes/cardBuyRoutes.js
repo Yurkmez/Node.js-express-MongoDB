@@ -21,6 +21,17 @@ function computePrice(courses) {
 // Добавление курса в корзину
 router.post('/add', auth, async (req, res) => {
     const course = await Course.findById(req.body.id);
+    // После того как мы доставали user через req.user,
+    // мы применяли к нему такого рода методы:
+    // ______ await req.user.addToCart(course);
+    // после организации session нам надо его доставать:
+    // _______await req.session.user.addToCart(course);
+    // но так напрямую не работает, т.к., user, полученный из
+    // req.session.user не получен из модели,
+    // и метод addToCart не распознает req.session.user. (undefined)
+    // поэтому создаем миделваре (userMiddleware.js) где
+    // req.user = await User.findById(req.session.user._id);
+    // т. е. тот же req.user мы получаем из модели, и тогда это работает
     await req.user.addToCart(course);
     // помним, что у нас есть мидлваре, в котором
     // мы внесли в  req.user юзера
