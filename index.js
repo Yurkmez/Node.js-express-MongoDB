@@ -3,7 +3,10 @@ const session = require('express-session');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
-
+// Данный пакет синхронизирует суссию с БД
+// это конструктор -> MongoStore - класс
+// на основе ктр мы создадим экземпляр класса new MongoStore
+const MongoStore = require('connect-mongodb-session')(session);
 // Solve the problem with the error "Handlebars: Access has been denied to resolve the property ..."
 // See "https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access"
 const Handlebars = require('handlebars');
@@ -23,6 +26,15 @@ const User = require('./models/user');
 const varMiddleware = require('./middleware/variablesMiddleware');
 
 const app = express();
+const MONGODB_URL =
+    'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';
+// ________ class for store session in MongjDB
+const store = new MongoStore({
+    collection: 'sessions',
+    // именно uri! (не url)
+    uri: MONGODB_URL,
+});
+// store - передаем ниже в app.use(session ...
 
 // ____ handlebars ________________
 //  Создаем и формируем параметры движка
@@ -44,6 +56,7 @@ app.use(
         secret: 'some secret value',
         resave: false,
         saveUninitialized: false,
+        store: store,
     })
 );
 // ___________________ ? _______________________
@@ -82,12 +95,10 @@ app.use('/card', cardRoutes);
 app.use('/order', orderRoutes);
 app.use('/auth', authRoutes);
 
-const url =
-    'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';
 // Start MongoDB
 async function start() {
     try {
-        await mongoose.connect(url);
+        await mongoose.connect(MONGODB_URL);
         const PORT = process.env.PORT || 5000;
         app.listen(PORT, () =>
             console.log(`Server is running on port ${PORT}`)
