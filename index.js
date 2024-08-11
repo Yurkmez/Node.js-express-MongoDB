@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
@@ -15,10 +16,11 @@ const coursesRoutes = require('./routes/coursesRoutes');
 const addCourseRoutes = require('./routes/addCourseRoutes');
 const cardRoutes = require('./routes/cardBuyRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const authRoutes = require('./routes/authRouters');
+const authRoutes = require('./routes/authRoutes');
 // ___________________ models ______________________________
 const User = require('./models/user');
-// _________________________________________________________
+// ___________________ middleware ______________________________________
+const varMiddleware = require('./middleware/variablesMiddleware');
 
 const app = express();
 
@@ -35,9 +37,26 @@ app.set('view engine', 'hbs'); // Установки по умолчанию: н
 app.set('views', 'views'); // и директория, в которй будут размещены файлы для рендеринга
 // _______ Папка "static" определяется как общая для доступа с файлов приложения, в частности, обеспечивает доступ к index.css
 app.use(express.static(path.join(__dirname, 'public')));
-// _________ Middleware ___________________
-app.use(express.urlencoded({ extended: true }));
+// _________ Middleware: ___________________
+// ____________________ session _______________
+app.use(
+    session({
+        secret: 'some secret value',
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+// ___________________ ? _______________________
 
+// то есть, если есть авторизация,
+//  а это в authRoutes, в POST запросе: req.session.isAuthenticated = true,
+// то в variableMiddleware(varMiddleware) мы имеем: res.locals.isAuth = req.session.isAuthenticated;
+// соответственно, isAuth = true
+// что позволяет скрыть некоторые п. меню до авторизации
+app.use(varMiddleware);
+// _____________________ ? _____________________
+app.use(express.urlencoded({ extended: true }));
+// ____________________ req.user = user _________
 app.use(async (req, res, next) => {
     try {
         const user = await User.findById('66b4b7db28f521879dabd9c8');
