@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const Course = require('../models/course');
+// Защита роутов (вход через браузер)
+const auth = require('../middleware/authMiddleware');
 
 const router = Router();
 
@@ -16,8 +18,8 @@ function computePrice(courses) {
         return (acc += current.price * current.count);
     }, 0);
 }
-
-router.post('/add', async (req, res) => {
+// Добавление курса в корзину
+router.post('/add', auth, async (req, res) => {
     const course = await Course.findById(req.body.id);
     await req.user.addToCart(course);
     // помним, что у нас есть мидлваре, в котором
@@ -26,7 +28,7 @@ router.post('/add', async (req, res) => {
     res.redirect('/card');
 });
 
-router.delete('/remove/:id', async (req, res) => {
+router.delete('/remove/:id', auth, async (req, res) => {
     await req.user.removeFromCart(req.params.id);
     const user = await req.user.populate('cart.items.courseId');
     // console.log('user: ', user);
@@ -40,7 +42,7 @@ router.delete('/remove/:id', async (req, res) => {
     res.status(200).json(cart);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const user = await req.user.populate('cart.items.courseId');
     // console.log(user.cart.items);
     const courses = mapCartItems(user.cart);

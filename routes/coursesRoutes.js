@@ -3,6 +3,8 @@
 
 const { Router } = require('express');
 const Course = require('../models/course');
+// Защита роутов (вход через браузер)
+const auth = require('../middleware/authMiddleware');
 const { log } = require('handlebars');
 
 const router = Router();
@@ -33,7 +35,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Роут получения одного курса (по id) для редактирования
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', auth, async (req, res) => {
     if (!req.query.allow) {
         return res.redirect('/');
     }
@@ -45,7 +47,7 @@ router.get('/:id/edit', async (req, res) => {
     });
 });
 // получили, отредактировали, сохраняем (update)
-router.post('/edit', async (req, res) => {
+router.post('/edit', auth, async (req, res) => {
     // чтобы не изменять id, мы его забираем из запроса и
     const { id } = req.body;
     // удаляем из body id,
@@ -55,7 +57,7 @@ router.post('/edit', async (req, res) => {
     res.redirect('/courses');
 });
 
-router.post('/remove', async (req, res) => {
+router.post('/remove', auth, async (req, res) => {
     try {
         await Course.deleteOne({ _id: req.body.id });
         res.redirect('/courses');

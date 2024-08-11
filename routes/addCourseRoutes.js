@@ -1,17 +1,19 @@
 const { Router } = require('express');
 const Course = require('../models/course');
+// Защита роутов (вход через браузер)
+const auth = require('../middleware/authMiddleware');
 const e = require('express');
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
     res.render('addCourse', {
         title: 'Add course',
         isAddCourse: true,
     }); // 'addCourse' - указываем название файла, находящегося в директории views, ктр мы указали при регистрации движка handlebars
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const course = new Course({
         title: req.body.title,
         price: req.body.price,
