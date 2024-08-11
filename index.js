@@ -57,15 +57,7 @@ app.use(varMiddleware);
 // _____________________ ? _____________________
 app.use(express.urlencoded({ extended: true }));
 // ____________________ req.user = user _________
-app.use(async (req, res, next) => {
-    try {
-        const user = await User.findById('66b4b7db28f521879dabd9c8');
-        req.user = user;
-        next();
-    } catch (error) {
-        console.log(error);
-    }
-});
+
 // _________ Подключение роутов, вынесенных в отдельные модули
 // ____ <a href ____ интересно, что мы обращаемся, например, из "courses.hbs" -
 // _________________  в варианте <a href='/courses/{{id}}'... или
@@ -100,18 +92,6 @@ async function start() {
         app.listen(PORT, () =>
             console.log(`Server is running on port ${PORT}`)
         );
-        // Проверяем, есть ли хотя бы один пользователь
-        // findOne() - если пользователь есть, то этот метод
-        // нам что то вернет
-        const candidate = await User.findOne();
-        if (!candidate) {
-            const user = new User({
-                email: 'qqq@gmail.com',
-                name: 'Q',
-                cart: { items: [] },
-            });
-            await user.save();
-        }
     } catch (error) {
         console.log(error);
     }
