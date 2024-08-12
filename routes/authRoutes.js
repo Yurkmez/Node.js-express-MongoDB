@@ -18,20 +18,58 @@ router.get('/logout', (req, res) => {
     req.session.destroy(() => res.redirect('/auth/login#login'));
 });
 
+// Авторизация
 router.post('/login', async (req, res) => {
-    const user = await User.findById('66b4b7db28f521879dabd9c8');
-    req.session.user = user;
-    req.session.isAuthenticated = true;
-    // Но, верхние операции могут не успеть завершится, а мы уже
-    // выполним переход (redirect), поэтому используем
-    // встроенный метод save()
-    req.session.save((error) => {
-        if (error) {
-            throw error;
+    try {
+        const { email, password } = req.body;
+        const candidate = await User.findOne({ email });
+        if (candidate) {
+            const isPassOk = password === candidate.password;
+            if (isPassOk) {
+                req.session.user = candidate;
+                // и, учитывая, что у нас миддлваре user, где
+                // req.user = await User.findById(req.session.user._id);
+                // то в дальнейшем у нас user "сидит" в req.user
+                // там где используется этот миделваре
+                req.session.isAuthenticated = true;
+                req.session.save((error) => {
+                    if (error) {
+                        throw error;
+                    } else {
+                        res.redirect('/');
+                    }
+                });
+            } else {
+                res.redirect('/auth/login#login');
+            }
         } else {
-            res.redirect('/');
+            res.redirect('/auth/login#login');
         }
-    });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+// Регистрация
+router.post('/register', async (req, res) => {
+    try {
+        const { email, name, password, confirm } = req.body;
+        const candidate = await User.findOne({ email });
+        if (candidate) {
+            res.redirect('/auth/login#register');
+        } else {
+            const user = new User({
+                email: email,
+                name: name,
+                password: password,
+                cart: { items: [] },
+            });
+            await user.save();
+            res.redirect('/auth/login#login');
+        }
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 module.exports = router;
