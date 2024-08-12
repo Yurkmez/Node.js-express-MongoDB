@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const router = Router();
 // Вход в логин
@@ -24,7 +25,7 @@ router.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const candidate = await User.findOne({ email });
         if (candidate) {
-            const isPassOk = password === candidate.password;
+            const isPassOk = await bcrypt.compare(password, candidate.password);
             if (isPassOk) {
                 req.session.user = candidate;
                 // и, учитывая, что у нас миддлваре user, где
@@ -58,10 +59,11 @@ router.post('/register', async (req, res) => {
         if (candidate) {
             res.redirect('/auth/login#register');
         } else {
+            const hashPassword = await bcrypt.hash(password, 10);
             const user = new User({
                 email: email,
                 name: name,
-                password: password,
+                password: hashPassword,
                 cart: { items: [] },
             });
             await user.save();
