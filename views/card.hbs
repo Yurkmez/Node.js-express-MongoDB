@@ -28,6 +28,7 @@
         </table>
         <p><strong>Sum price: </strong><span class='price'>{{price}}</span></p>
         <form action='./order' method='post'>
+            <input type='hidden' name='_csrf' value='{{csrfToken}}' />
             <button type='submit' class='btn'>Order</button>
         </form>
     {{else}}

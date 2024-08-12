@@ -1,9 +1,12 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
-// Данный пакет синхронизирует суссию с БД
+const csrf = require('csurf');
+const bodyParser = require('body-parser');
+// Пакет ниже синхронизирует сессию с БД
 // это конструктор -> MongoStore - класс
 // на основе ктр мы создадим экземпляр класса new MongoStore
 const MongoStore = require('connect-mongodb-session')(session);
@@ -60,14 +63,25 @@ app.use(
         store: store,
     })
 );
-// ___________________ user -> req.user _______________________
+// _______________________ cookieParser ______________________
+// const parseForm = bodyParser.urlencoded({ extended: false });
+// _______________________ csurf __________________________________
+const csrfProtect = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
+app.use(cookieParser());
+// Для всех POST запросов подключаем csrfProtect и в каждом инпуте добавляем значение токена
+// {{csrfToken}}. Т.о. каждый запрос идет с токеном
+app.post('/process', parseForm, csrfProtect, function (req, res) {
+    res.send('data is being processed');
+});
+
+// _______________________ user -> req.user _______________________
 app.use(userMiddleware);
-// то есть, если есть авторизация,
-//  а это в authRoutes, в POST запросе: req.session.isAuthenticated = true,
-// то в variableMiddleware(varMiddleware) мы имеем: res.locals.isAuth = req.session.isAuthenticated;
-// соответственно, isAuth = true
-// что позволяет скрыть некоторые п. меню до авторизации
+// _______________________ isAuth = true/false _____________________
+// _______________________ res.local.csrf = req.csrfToken() ________
 app.use(varMiddleware);
+// то есть, если есть авторизация POST запросе в authRoutes: req.session.isAuthenticated = true,
+// то в variableMiddleware(varMiddleware) мы имеем isAuth = true: res.locals.isAuth = req.session.isAuthenticated;
 // _____________________ ? _____________________
 app.use(express.urlencoded({ extended: true }));
 // ____________________ req.user = user _________

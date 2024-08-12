@@ -21,5 +21,6 @@
         <input id='img' type='text' name='img' class='validate' required />
         <span class='helper-text' data-error='Enter URL picture'></span>
     </div>
+    <input type='hidden' name='_csrf' value='{{csrfToken}}' />
     <button class='btn btn-primary'>Add course</button>
 </form>
