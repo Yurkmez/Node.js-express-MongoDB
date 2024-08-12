@@ -49,7 +49,7 @@ router.delete('/remove/:id', auth, async (req, res) => {
         courses,
         price: computePrice(courses),
     };
-    console.log('cart.price: ', cart.price);
+    // console.log('cart.price: ', cart.price);
     res.status(200).json(cart);
 });
 

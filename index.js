@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
@@ -23,8 +24,6 @@ const addCourseRoutes = require('./routes/addCourseRoutes');
 const cardRoutes = require('./routes/cardBuyRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
-// ___________________ models ______________________________
-const User = require('./models/user');
 // ___________________ middleware ______________________________________
 const varMiddleware = require('./middleware/variablesMiddleware');
 const userMiddleware = require('./middleware/userMiddleware');
@@ -74,7 +73,8 @@ app.use(cookieParser());
 app.post('/process', parseForm, csrfProtect, function (req, res) {
     res.send('data is being processed');
 });
-
+//  ______________________ connect-flash __________________________
+app.use(flash());
 // _______________________ user -> req.user _______________________
 app.use(userMiddleware);
 // _______________________ isAuth = true/false _____________________

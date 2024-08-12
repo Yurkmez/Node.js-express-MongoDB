@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 // Роут получения одного курса по id
 router.get('/:id', async (req, res) => {
-    console.log('id:', req.params.id);
+    // console.log('id:', req.params.id);
     const course = await Course.findById(req.params.id);
     res.render('singleCourse', {
         layout: 'empty',

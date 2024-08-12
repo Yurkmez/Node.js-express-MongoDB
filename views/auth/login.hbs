@@ -12,6 +12,14 @@
             </ul>
         </div>
         <div id='login' class='col s6 offset-s3'>
+            {{! Мидлваре "cjnnect-flash" использется
+            в роуте, который при перенаправлении пользователя 
+            на данную страницу передает и параметр - 'error',
+            и если она есть - то отражаем
+            }}
+            {{#if errorLogin}}
+                <p class='alert'>{{errorLogin}}</p>
+            {{/if}}
             <h5>Login to the app</h5>
             <form action='/auth/login' method='POST'>
                 <div class='input-field'>
@@ -45,6 +53,9 @@
 
         </div>
         <div id='register' class='col s6 offset-s3'>
+            {{#if errorRegister}}
+                <p class='alert'>{{errorRegister}}</p>
+            {{/if}}
             <h5>Register</h5>
             <form action='/auth/register' method='POST'>
                 <div class='input-field'>
