@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const keys = require('./keys');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
@@ -29,13 +30,11 @@ const varMiddleware = require('./middleware/variablesMiddleware');
 const userMiddleware = require('./middleware/userMiddleware');
 // ________________________________________________________
 const app = express();
-const MONGODB_URL =
-    'mongodb+srv://Yurkmez:kaplumbaga_7777@shaps.v2qkanr.mongodb.net/NewCourses';
 // ________ class for store session in MongjDB
 const store = new MongoStore({
     collection: 'sessions',
     // именно uri! (не url)
-    uri: MONGODB_URL,
+    uri: keys.MONGODB_URL,
 });
 // store - передаем ниже в app.use(session ...
 
@@ -56,7 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ____________________ session _______________
 app.use(
     session({
-        secret: 'some secret value',
+        secret: keys.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
         store: store,
@@ -113,7 +112,7 @@ app.use('/auth', authRoutes);
 // Start MongoDB
 async function start() {
     try {
-        await mongoose.connect(MONGODB_URL);
+        await mongoose.connect(keys.MONGODB_URL);
         const PORT = process.env.PORT || 5000;
         app.listen(PORT, () =>
             console.log(`Server is running on port ${PORT}`)
