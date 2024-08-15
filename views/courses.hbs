@@ -18,8 +18,11 @@
                         courses, но isAuth - на корневом уровне страницы,
                         и чтобы обратиться к данному элементу мы добавляем @root }}
                         {{#if @root.isAuth}}
-                            <a href='/courses/{{id}}/edit?allow=true'>Edit
-                                course</a>
+                            {{#if_equal userId._id @root.userId}}
+                                <a href='/courses/{{id}}/edit?allow=true'>Edit
+                                    course</a>
+                            {{/if_equal}}
+
                             <form action='/card/add' method='POST'>
                                 <input
                                     type='hidden'

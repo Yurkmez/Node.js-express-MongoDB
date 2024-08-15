@@ -43,6 +43,7 @@ const store = new MongoStore({
 const hbs = exphbs.create({
     defaultLayout: 'main',
     extname: 'hbs',
+    helpers: require('./utils/hbsHelper.js'),
     // Solve the problem with the error "Handlebars: Access has been denied to resolve the property ..."
     handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
