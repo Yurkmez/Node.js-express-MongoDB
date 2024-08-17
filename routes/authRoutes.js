@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const keys = require('../keys');
 const crypto = require('crypto');
+const { validationResult } = require('express-validator');
+const { registerValidators } = require('../utils/validators');
 // Почта
 const nodemailer = require('nodemailer');
 const regEmail = require('../email/registration');
@@ -77,10 +79,17 @@ router.post('/login', async (req, res) => {
 });
 
 // Регистрация
-router.post('/register', async (req, res) => {
+router.post('/register', registerValidators, async (req, res) => {
     try {
         const { email, name, password, confirm } = req.body;
         const candidate = await User.findOne({ email });
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            req.flash('errorRegister', errors.array()[0].msg);
+            return res.status(422).redirect('/auth/login#register');
+        }
+
         if (candidate) {
             req.flash('errorRegister', 'This email address already exists!');
             res.redirect('/auth/login#register');
