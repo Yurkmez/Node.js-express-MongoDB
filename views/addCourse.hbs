@@ -1,7 +1,17 @@
 <h1>Add course</h1>
-<form action='/add' method='POST'>
+{{#if error}}
+    <p class='alert'>{{error}}</p>
+{{/if}}
+<form action='/add' method='POST' novalidate>
     <div class='input-field'>
-        <input id='title' type='text' name='title' class='validate' required />
+        <input
+            id='title'
+            type='text'
+            name='title'
+            class='validate'
+            value='{{data.title}}'
+            required
+        />
         <label for='title'>Name Course</label>
         <span class='helper-text' data-error='Enter name new course'></span>
     </div>
@@ -11,6 +21,7 @@
             type='number'
             name='price'
             class='validate'
+            value='{{data.price}}'
             required
             min='1'
         />
@@ -18,7 +29,14 @@
         <span class='helper-text' data-error='Enter price'></span>
     </div>
     <div class='input-field'>
-        <input id='img' type='text' name='img' class='validate' required />
+        <input
+            id='img'
+            type='text'
+            name='img'
+            value='{{data.img}}'
+            class='validate'
+            required
+        />
         <span class='helper-text' data-error='Enter URL picture'></span>
     </div>
     <input type='hidden' name='_csrf' value='{{csrfToken}}' />

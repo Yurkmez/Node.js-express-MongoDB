@@ -12,7 +12,7 @@
             </ul>
         </div>
         <div id='login' class='col s6 offset-s3'>
-            {{! Мидлваре "cjnnect-flash" использется
+            {{! Мидлваре "connect-flash" использется
             в роуте, который при перенаправлении пользователя 
             на данную страницу передает и параметр - 'error',
             и если она есть - то отражаем
@@ -21,13 +21,14 @@
                 <p class='alert'>{{errorLogin}}</p>
             {{/if}}
             <h5>Login to the app</h5>
-            <form action='/auth/login' method='POST'>
+            <form action='/auth/login' method='POST' novalidate>
                 <div class='input-field'>
                     <input
                         id='email'
                         type='email'
                         name='email'
                         class='validate'
+                        autocomplete='nofill'
                         required
                     />
                     <label for='email'>Email</label>
@@ -39,6 +40,7 @@
                         type='password'
                         name='password'
                         class='validate'
+                        autocomplete='new-password'
                         required
                     />
                     <label for='password'>Password</label>
@@ -51,7 +53,7 @@
                 <p><a href='/auth/reset'>Fogot password?</a></p>
                 <button type='submit' class='btn btn-primary'>Login</button>
             </form>
-
+            {{! REGISTRATION }}
         </div>
         <div id='register' class='col s6 offset-s3'>
             {{#if errorRegister}}
@@ -87,6 +89,7 @@
                         type='password'
                         name='password'
                         class='validate'
+                        autocomplete='new-password'
                         required
                     />
                     <label for='passwordReg'>Password</label>
@@ -101,6 +104,7 @@
                         type='password'
                         name='confirm'
                         class='validate'
+                        autocomplete='new-password'
                         required
                     />
                     <label for='confirm'>Repead password</label>
