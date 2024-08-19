@@ -28,6 +28,7 @@ const authRoutes = require('./routes/authRoutes');
 // ___________________ middleware ______________________________________
 const varMiddleware = require('./middleware/variablesMiddleware');
 const userMiddleware = require('./middleware/userMiddleware');
+const errorMiddleware = require('./middleware/error.js');
 // ________________________________________________________
 const app = express();
 // ________ class for store session in MongjDB
@@ -109,7 +110,7 @@ app.use('/add', addCourseRoutes);
 app.use('/card', cardRoutes);
 app.use('/order', orderRoutes);
 app.use('/auth', authRoutes);
-
+app.use(errorMiddleware);
 // Start MongoDB
 async function start() {
     try {
