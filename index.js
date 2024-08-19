@@ -25,10 +25,12 @@ const addCourseRoutes = require('./routes/addCourseRoutes');
 const cardRoutes = require('./routes/cardBuyRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes.js');
 // ___________________ middleware ______________________________________
 const varMiddleware = require('./middleware/variablesMiddleware');
 const userMiddleware = require('./middleware/userMiddleware');
 const errorMiddleware = require('./middleware/error.js');
+const fileMiddleware = require('./middleware/file.js');
 // ________________________________________________________
 const app = express();
 // ________ class for store session in MongjDB
@@ -53,6 +55,7 @@ app.set('view engine', 'hbs'); // Установки по умолчанию: н
 app.set('views', 'views'); // и директория, в которй будут размещены файлы для рендеринга
 // _______ Папка "static" определяется как общая для доступа с файлов приложения, в частности, обеспечивает доступ к index.css
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 // _________ Middleware: ___________________
 // ____________________ session _______________
 app.use(
@@ -63,6 +66,7 @@ app.use(
         store: store,
     })
 );
+app.use(fileMiddleware.single('avatar'));
 // _______________________ cookieParser ______________________
 // const parseForm = bodyParser.urlencoded({ extended: false });
 // _______________________ csurf __________________________________
@@ -110,6 +114,7 @@ app.use('/add', addCourseRoutes);
 app.use('/card', cardRoutes);
 app.use('/order', orderRoutes);
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
 app.use(errorMiddleware);
 // Start MongoDB
 async function start() {

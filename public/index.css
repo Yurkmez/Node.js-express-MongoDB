@@ -53,3 +53,12 @@
     background-color: rgb(244, 180, 180);
     color: black;
 }
+
+.avatar {
+    max-width: 300px;
+    height: auto;
+}
+.changeAvatar {
+    background-color: lightblue;
+    font-size: 1.2rem;
+}
