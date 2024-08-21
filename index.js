@@ -4,6 +4,7 @@ const path = require('path');
 const keys = require('./keys');
 const flash = require('connect-flash');
 const helmet = require('helmet');
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
@@ -96,6 +97,7 @@ app.use(
         contentSecurityPolicy: false,
     })
 );
+app.use(compression());
 // _________ Подключение роутов, вынесенных в отдельные модули
 // ____ <a href ____ интересно, что мы обращаемся, например, из "courses.hbs" -
 // _________________  в варианте <a href='/courses/{{id}}'... или
