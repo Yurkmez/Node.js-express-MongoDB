@@ -17,7 +17,6 @@ router.post('/', auth, async (req, res) => {
         const user = await User.findById(req.user._id);
 
         const userChange = { name: req.body.name };
-        console.log(req.file);
 
         if (req.file) {
             userChange.avatarUrl = req.file.path;

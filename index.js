@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const keys = require('./keys');
 const flash = require('connect-flash');
+const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
@@ -89,8 +90,12 @@ app.use(varMiddleware);
 // то в variableMiddleware(varMiddleware) мы имеем isAuth = true: res.locals.isAuth = req.session.isAuthenticated;
 // _____________________ ? _____________________
 app.use(express.urlencoded({ extended: true }));
-// ____________________ req.user = user _________
-
+// ____________________ helmet _________
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
 // _________ Подключение роутов, вынесенных в отдельные модули
 // ____ <a href ____ интересно, что мы обращаемся, например, из "courses.hbs" -
 // _________________  в варианте <a href='/courses/{{id}}'... или
